@@ -1,0 +1,347 @@
+/**
+ * ============================================================
+ * Bank Account Dashboard — style.css
+ * Supplements Tailwind CSS with:
+ *   • Reusable component classes (cards, KPI, table, form, badge)
+ *   • Custom scrollbar
+ *   • Smooth scroll
+ *   • Hover / transition effects not easily expressible in Tailwind
+ * ============================================================
+ */
+
+/* ── Base reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Custom scrollbar (Webkit) ──────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* ── Card component ─────────────────────────────────────── */
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  transition:
+    box-shadow 0.2s ease,
+    background 0.3s ease;
+}
+
+.dark .card {
+  background: #111827;
+  border-color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dark .card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Card sub-elements */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.card-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #111827;
+}
+.dark .card-title {
+  color: #f9fafb;
+}
+
+.card-subtitle {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 1px;
+}
+
+/* ── KPI card ───────────────────────────────────────────── */
+.kpi-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.3s ease;
+  cursor: default;
+}
+.dark .kpi-card {
+  background: #111827;
+  border-color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+.dark .kpi-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.kpi-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  margin-bottom: 0.35rem;
+}
+.kpi-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+  transition: color 0.3s ease;
+}
+.kpi-sub {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+.kpi-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.kpi-card:hover .kpi-icon {
+  transform: scale(1.1);
+}
+
+/* ── Section title ──────────────────────────────────────── */
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem;
+}
+.dark .section-title {
+  color: #f9fafb;
+}
+
+/* ── Form elements ──────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4b5563;
+  letter-spacing: 0.02em;
+}
+.dark .form-label {
+  color: #9ca3af;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.625rem;
+  border: 1.5px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.2s ease;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.dark .form-input {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f9fafb;
+}
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.dark .form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Overrides for <select> arrow */
+select.form-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 1.25em;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+/* ── Primary button ─────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: #3b82f6;
+  border: none;
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.4);
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.45);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ── Table styles ───────────────────────────────────────── */
+.th-cell {
+  padding: 0.65rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #6b7280;
+  white-space: nowrap;
+  text-align: left;
+}
+.dark .th-cell {
+  color: #9ca3af;
+}
+
+.td-cell {
+  padding: 0.65rem 1rem;
+  font-size: 0.8125rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s ease;
+}
+.dark .td-cell {
+  color: #d1d5db;
+  border-bottom-color: #1f2937;
+}
+
+.table-row {
+  transition: background 0.15s ease;
+}
+.table-row:hover td {
+  background: #f0f9ff !important;
+}
+.dark .table-row:hover td {
+  background: #1e3a5f !important;
+}
+
+.table-row:last-child td {
+  border-bottom: none;
+}
+
+/* ── Category badge ─────────────────────────────────────── */
+.category-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #eff6ff;
+  color: #1d4ed8;
+  white-space: nowrap;
+}
+.dark .category-badge {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+
+/* ── Responsive table: show horizontal scroll handle ───── */
+@media (max-width: 640px) {
+  .card.overflow-x-auto {
+    padding: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .card.overflow-x-auto table {
+    min-width: 640px;
+  }
+}
+
+/* ── Fade-in animation for page load ────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+main > section {
+  animation: fadeInUp 0.45s ease both;
+}
+main > section:nth-child(1) {
+  animation-delay: 0.05s;
+}
+main > section:nth-child(2) {
+  animation-delay: 0.12s;
+}
+main > section:nth-child(3) {
+  animation-delay: 0.19s;
+}
+main > section:nth-child(4) {
+  animation-delay: 0.26s;
+}
+
+/* ── Number counter animation helper ────────────────────── */
+.kpi-value {
+  transition: opacity 0.25s ease;
+}

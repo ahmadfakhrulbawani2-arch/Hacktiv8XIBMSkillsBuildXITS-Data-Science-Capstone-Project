@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bank Account Dashboard</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Tailwind dark mode config -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body
+    class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen"
+  >
+    <!-- ══════════════════════════════════════════
+       HEADER / NAVBAR
+  ══════════════════════════════════════════ -->
+    <header
+      class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-800 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <!-- Bank icon -->
+          <div
+            class="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center shadow"
+          >
+            <svg
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 21h18M3 10h18M5 10V6l7-3 7 3v4M9 21v-6h6v6"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-base font-bold leading-tight">
+              FakhrulFinance Bank
+            </h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">
+              Account Dashboard
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: account badge + dark mode toggle -->
+        <div class="flex items-center gap-3">
+          <!-- Account info badge -->
+          <div
+            id="headerAccountBadge"
+            class="hidden sm:flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-1.5 text-xs font-medium"
+          >
+            <span
+              class="w-2 h-2 rounded-full bg-green-400 animate-pulse"
+            ></span>
+            <span
+              id="headerAccountType"
+              class="text-gray-600 dark:text-gray-300"
+              >Checking</span
+            >
+            <span class="text-gray-400 dark:text-gray-500">·</span>
+            <span
+              id="headerCurrency"
+              class="text-brand-600 dark:text-brand-400 font-semibold"
+              >USD</span
+            >
+          </div>
+
+          <!-- Dark mode toggle -->
+          <button
+            id="themeToggle"
+            aria-label="Toggle dark mode"
+            class="w-9 h-9 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+          >
+            <!-- Sun icon (shown in dark mode) -->
+            <svg
+              id="iconSun"
+              class="w-5 h-5 text-yellow-500 hidden"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <path
+                stroke-linecap="round"
+                d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+              />
+            </svg>
+            <!-- Moon icon (shown in light mode) -->
+            <svg
+              id="iconMoon"
+              class="w-5 h-5 text-gray-600 dark:text-gray-300"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <!-- ── SECTION 1: KPI CARDS ────────────────── -->
+      <section aria-labelledby="kpiHeading">
+        <h2 id="kpiHeading" class="sr-only">Key Performance Indicators</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- KPI: Total Revenue -->
+          <article class="kpi-card group">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="kpi-label">Total Revenue</p>
+                <p
+                  id="kpiRevenue"
+                  class="kpi-value text-green-600 dark:text-green-400"
+                >
+                  —
+                </p>
+                <p id="kpiRevenueCount" class="kpi-sub">— transactions</p>
+              </div>
+              <div
+                class="kpi-icon bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 19V5m0 0l-7 7m7-7l7 7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </article>
+
+          <!-- KPI: Total Expense -->
+          <article class="kpi-card group">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="kpi-label">Total Expense</p>
+                <p
+                  id="kpiExpense"
+                  class="kpi-value text-red-600 dark:text-red-400"
+                >
+                  —
+                </p>
+                <p id="kpiExpenseCount" class="kpi-sub">— transactions</p>
+              </div>
+              <div
+                class="kpi-icon bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 5v14m0 0l7-7m-7 7l-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </article>
+
+          <!-- KPI: Avg Daily Balance -->
+          <article class="kpi-card group">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="kpi-label">Avg Daily Balance</p>
+                <p
+                  id="kpiAvgBalance"
+                  class="kpi-value text-brand-600 dark:text-brand-400"
+                >
+                  —
+                </p>
+                <p id="kpiPeriod" class="kpi-sub">over — days</p>
+              </div>
+              <div
+                class="kpi-icon bg-blue-100 dark:bg-blue-900/40 text-brand-600 dark:text-brand-400"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm6 0V9a2 2 0 00-2-2h-2a2 2 0 00-2 2v10m6 0a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v12"
+                  />
+                </svg>
+              </div>
+            </div>
+          </article>
+
+          <!-- KPI: Net Cash Flow -->
+          <article class="kpi-card group">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="kpi-label">Net Cash Flow</p>
+                <p id="kpiNet" class="kpi-value">—</p>
+                <p id="kpiNetLabel" class="kpi-sub">revenue − expense</p>
+              </div>
+              <div
+                id="kpiNetIcon"
+                class="kpi-icon bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7 12l5-5 5 5M7 17l5-5 5 5"
+                  />
+                </svg>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── SECTION 2: CHARTS ──────────────────── -->
+      <section aria-labelledby="chartsHeading">
+        <h2 id="chartsHeading" class="section-title">Analytics</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Account Balance (last 30 days) — takes 2/3 width on lg -->
+          <div class="card lg:col-span-2">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Account Balance</h3>
+                <p class="card-subtitle">Last 30 days trend</p>
+              </div>
+            </div>
+            <div class="relative h-64">
+              <canvas
+                id="chartBalance"
+                aria-label="Account balance trend chart"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Expense by Category -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Expense by Category</h3>
+                <p class="card-subtitle">All time</p>
+              </div>
+            </div>
+            <div class="relative h-64">
+              <canvas
+                id="chartExpense"
+                aria-label="Expense by category bar chart"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Revenue by Category — full width -->
+          <div class="card lg:col-span-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Revenue by Category</h3>
+                <p class="card-subtitle">All time</p>
+              </div>
+            </div>
+            <div class="relative h-52">
+              <canvas
+                id="chartRevenue"
+                aria-label="Revenue by category bar chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SECTION 3: ADD TRANSACTION FORM ────── -->
+      <section aria-labelledby="formHeading">
+        <h2 id="formHeading" class="section-title">Add New Transaction</h2>
+        <div class="card">
+          <form
+            id="addTransactionForm"
+            novalidate
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <div class="form-group">
+              <label class="form-label" for="fDate">Date *</label>
+              <input id="fDate" type="date" class="form-input" required />
+            </div>
+
+            <div class="form-group sm:col-span-2 lg:col-span-2">
+              <label class="form-label" for="fDesc">Description *</label>
+              <input
+                id="fDesc"
+                type="text"
+                placeholder="e.g. NETFLIX SUBSCRIPTION"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fCategory">Category *</label>
+              <select id="fCategory" class="form-input" required>
+                <option value="">Select category…</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fChannel">Channel</label>
+              <select id="fChannel" class="form-input">
+                <option value="">Select channel…</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Card Online">Card Online</option>
+                <option value="Online Transfer">Online Transfer</option>
+                <option value="Direct Debit">Direct Debit</option>
+                <option value="Direct Deposit">Direct Deposit</option>
+                <option value="ATM">ATM</option>
+                <option value="Bank Credit">Bank Credit</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fType">Type *</label>
+              <select id="fType" class="form-input" required>
+                <option value="">Select type…</option>
+                <option value="credit">Revenue (Credit)</option>
+                <option value="debit">Expense (Debit)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fAmount">Amount (USD) *</label>
+              <input
+                id="fAmount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <!-- Form feedback & submit -->
+            <div
+              class="sm:col-span-2 lg:col-span-3 flex flex-col sm:flex-row items-start sm:items-center gap-3"
+            >
+              <button type="submit" class="btn-primary">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Add Transaction
+              </button>
+              <p id="formMsg" class="text-sm font-medium hidden"></p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ── SECTION 4: HISTORY TABLE ──────────── -->
+      <section aria-labelledby="historyHeading">
+        <h2 id="historyHeading" class="section-title">Transaction History</h2>
+
+        <!-- Filter & Sort toolbar -->
+        <div class="card mb-4">
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+            <!-- Search -->
+            <div class="flex-1 min-w-[180px]">
+              <label class="form-label" for="searchInput">Search</label>
+              <div class="relative">
+                <svg
+                  class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+                </svg>
+                <input
+                  id="searchInput"
+                  type="search"
+                  placeholder="Description or ID…"
+                  class="form-input pl-9"
+                />
+              </div>
+            </div>
+
+            <!-- Filter by category -->
+            <div class="min-w-[160px]">
+              <label class="form-label" for="filterCategory">Category</label>
+              <select id="filterCategory" class="form-input">
+                <option value="">All categories</option>
+              </select>
+            </div>
+
+            <!-- Sort by -->
+            <div class="min-w-[160px]">
+              <label class="form-label" for="sortBy">Sort By</label>
+              <select id="sortBy" class="form-input">
+                <option value="date-desc">Date (Newest)</option>
+                <option value="date-asc">Date (Oldest)</option>
+                <option value="description-asc">Description A→Z</option>
+                <option value="description-desc">Description Z→A</option>
+                <option value="amount-desc">Amount (High)</option>
+                <option value="amount-asc">Amount (Low)</option>
+              </select>
+            </div>
+
+            <!-- Type filter -->
+            <div class="min-w-[140px]">
+              <label class="form-label" for="filterType">Type</label>
+              <select id="filterType" class="form-input">
+                <option value="">All</option>
+                <option value="credit">Revenue</option>
+                <option value="debit">Expense</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Result count -->
+          <p
+            id="resultCount"
+            class="mt-3 text-xs text-gray-500 dark:text-gray-400"
+          ></p>
+        </div>
+
+        <!-- Table wrapper (scrollable on small screens) -->
+        <div class="card overflow-x-auto p-0">
+          <table class="w-full text-sm">
+            <thead>
+              <tr
+                class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60"
+              >
+                <th class="th-cell">Date</th>
+                <th class="th-cell">ID</th>
+                <th class="th-cell">Description</th>
+                <th class="th-cell">Category</th>
+                <th class="th-cell">Channel</th>
+                <th class="th-cell text-right">Debit</th>
+                <th class="th-cell text-right">Credit</th>
+                <th class="th-cell text-right">Balance</th>
+              </tr>
+            </thead>
+            <tbody id="transactionTableBody">
+              <!-- Rows rendered by JS -->
+            </tbody>
+          </table>
+
+          <!-- Empty state -->
+          <div
+            id="emptyState"
+            class="hidden py-16 text-center text-gray-400 dark:text-gray-600"
+          >
+            <svg
+              class="w-12 h-12 mx-auto mb-3 opacity-40"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-3-3v6M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
+              />
+            </svg>
+            <p class="text-sm font-medium">No transactions found</p>
+            <p class="text-xs mt-1">Try adjusting your filters</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+    <footer
+      class="mt-12 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-center py-5 text-xs text-gray-400 dark:text-gray-600"
+    >
+      © 2026 NovaTech Bank · Account Dashboard · All data sourced from
+      <code class="font-mono">transactions_history.json</code>
+    </footer>
+
+    <!-- Main application script -->
+    <script src="script.js"></script>
+  </body>
+</html>
